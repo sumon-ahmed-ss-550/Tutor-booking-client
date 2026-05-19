@@ -1,5 +1,5 @@
-// import Carousel from "@/components/Carousel";
+import Carousel from "@/components/Carousel";
 
 export default function Home() {
-  return <div>{/* <Carousel></Carousel> */}</div>;
+  return <div>{<Carousel></Carousel>}</div>;
 }
