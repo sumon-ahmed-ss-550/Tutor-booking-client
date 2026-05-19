@@ -13,12 +13,32 @@ import {
   TextField,
 } from "@heroui/react";
 import { FcGoogle } from "react-icons/fc";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
-  const onSubmit = (e) => {
+  const router = useRouter();
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newData = Object.fromEntries(formData.entries());
+
+    const { data, error } = await authClient.signIn.email({
+      email: newData.email,
+      password: newData.password,
+    });
+    if (data) {
+      toast.success("User login successfully");
+      router.push("/");
+    }
+  };
+
+  const handleGoogleButton = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
   };
 
   return (
@@ -95,7 +115,12 @@ const LoginPage = () => {
 
         <div>
           {/* Google Login */}
-          <Button type="button" variant="bordered" className="w-full">
+          <Button
+            onClick={handleGoogleButton}
+            type="button"
+            variant="bordered"
+            className="w-full"
+          >
             <FcGoogle size={22} />
             Continue with Google
           </Button>

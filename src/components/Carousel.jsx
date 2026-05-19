@@ -36,7 +36,7 @@ const Carousel = () => {
   ];
 
   return (
-    <section className="max-w-7xl m-auto px-3 my-6">
+    <section>
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -49,7 +49,7 @@ const Carousel = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper rounded"
+        className="mySwiper"
       >
         {carouselData.map((carousel) => (
           <SwiperSlide key={carousel.id}>
@@ -74,7 +74,7 @@ const Carousel = () => {
                   <Link href="/tutors">
                     <Button
                       variant="outline"
-                      className="rounded-none text-[#5bd9b3] px-8"
+                      className="rounded text-[#5bd9b3] px-8"
                     >
                       {carousel.buttonText}
                     </Button>

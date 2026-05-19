@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@heroui/react";
-import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
+import { Avatar, Button } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -62,6 +62,14 @@ const Navbar = () => {
     </>
   );
 
+  const { data: session } = authClient.useSession();
+  const userData = session?.user;
+  console.log(userData);
+
+  const handleSignOutButton = async () => {
+    await authClient.signOut();
+  };
+
   return (
     <nav className="shadow-sm py-3">
       <div className="px-3">
@@ -93,23 +101,41 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button
-                variant="outline"
-                className="rounded-none border-none bg-[#0485f7] text-[#ffffff]"
-              >
-                Login
-              </Button>
-            </Link>
+            {userData ? (
+              <div className="flex items-center gap-3">
+                <Avatar className="outline outline-offset-1">
+                  <Avatar.Image
+                    alt={`${userData?.name}`}
+                    src={`${userData?.image}`}
+                    referrerPolicy="no-referrer"
+                  />
+                  <Avatar.Fallback>{`${userData?.name?.charAt(0)}`}</Avatar.Fallback>
+                </Avatar>
+                <Button onClick={handleSignOutButton} className="rounded">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link href="/login">
+                  <Button
+                    variant="outline"
+                    className="rounded border-none bg-[#0485f7] text-[#ffffff]"
+                  >
+                    Login
+                  </Button>
+                </Link>
 
-            <Link href="/register">
-              <Button
-                variant="outline"
-                className="rounded-none border-none bg-[#0485f7] text-[#ffffff]"
-              >
-                Register
-              </Button>
-            </Link>
+                <Link href="/register">
+                  <Button
+                    variant="outline"
+                    className="rounded border-none bg-[#0485f7] text-[#ffffff]"
+                  >
+                    Register
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

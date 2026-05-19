@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -10,12 +11,30 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
-  const onSubmit = (e) => {
+  const router = useRouter();
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newData = Object.fromEntries(formData.entries());
+
+    const { data, error } = await authClient.signUp.email({
+      name: newData.name,
+      email: newData.email,
+      image: newData.photoURL,
+      password: newData.password,
+    });
+
+    if (data) {
+      router.push("/login");
+    } else {
+      toast.error("Registration failed. Try again");
+    }
+    console.log({ data, error });
   };
 
   return (
@@ -62,19 +81,7 @@ const RegisterPage = () => {
           </TextField>
 
           {/* Photo URL */}
-          <TextField
-            isRequired
-            name="photoURL"
-            type="url"
-            validate={(value) => {
-              try {
-                new URL(value);
-                return null;
-              } catch {
-                return "Please enter a valid URL";
-              }
-            }}
-          >
+          <TextField name="photoURL" type="url">
             <Label>Photo URL</Label>
             <Input
               placeholder="https://example.com/photo.jpg"
