@@ -1,11 +1,19 @@
-export const metadata = {
-  title: "My Book Session",
-};
+import MyBookingUserData from "@/components/MyBookingUserData";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-const MyBookSessionPage = () => {
+const MyBookSessionPage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const userId = session?.user?.id;
+
+  const res = await fetch(`http://localhost:8000/tutors/booking/${userId}`);
+  const data = await res.json();
+  console.log("My Bookings Data:", data);
   return (
     <div>
-      <h1>This is my book session page</h1>
+      <MyBookingUserData data={data}></MyBookingUserData>
     </div>
   );
 };
