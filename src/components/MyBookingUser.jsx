@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AlertDialog, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 
@@ -10,23 +10,10 @@ const MyBookingUser = ({ oneUser }) => {
   // form state
   const [formData, setFormData] = useState({
     tutorName: oneUser?.tutorName || "",
-    userId: "",
-    userEmail: "",
     name: "",
     email: "",
     status: "Confirmed",
   });
-
-  // ✅ FIXED: session sync (no error)
-  useEffect(() => {
-    if (session?.user) {
-      setFormData((prev) => ({
-        ...prev,
-        userId: session.user.id || "",
-        userEmail: session.user.email || "",
-      }));
-    }
-  }, [session]);
 
   // input change handle
   const handleChange = (e) => {
@@ -40,16 +27,28 @@ const MyBookingUser = ({ oneUser }) => {
 
   // confirm booking
   const handleConfirmBooking = async () => {
-    const res = await fetch("http://localhost:8000/tutors/booking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const bookingData = {
+      ...formData,
+      userId: session?.user?.id || "",
+      userEmail: session?.user?.email || "",
+    };
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/tutors/booking`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
       },
-      body: JSON.stringify(formData),
-    });
+    );
 
     const data = await res.json();
+
+    console.log(data);
   };
+
   return (
     <AlertDialog>
       {/* Open Button */}

@@ -8,7 +8,9 @@ const MyBookSessionPage = async () => {
   });
   const userId = session?.user?.id;
 
-  const res = await fetch(`http://localhost:8000/tutors/booking/${userId}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/tutors/booking/${userId}`,
+  );
   const data = await res.json();
   console.log("My Bookings Data:", data);
   return (

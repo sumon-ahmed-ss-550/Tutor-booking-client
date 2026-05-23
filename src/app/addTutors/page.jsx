@@ -39,11 +39,15 @@ export default function AddTutorPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8000/tutors", {
+    const tokenResponse = await authClient.token();
+    const token = tokenResponse?.data?.token || tokenResponse?.token;
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/tutors`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

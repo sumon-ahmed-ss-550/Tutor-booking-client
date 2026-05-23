@@ -22,7 +22,7 @@ const MyBookingUserData = ({ data = [] }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/booking/${sessionToCancel._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${sessionToCancel._id}`,
         {
           method: "PATCH",
           headers: {

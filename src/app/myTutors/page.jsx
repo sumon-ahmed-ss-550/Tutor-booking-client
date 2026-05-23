@@ -8,7 +8,9 @@ const MyTutorsPage = async () => {
   });
   const user = session?.user;
 
-  const res = await fetch(`http://localhost:8000/tutors/user/${user?.id}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/tutors/user/${user?.id}`,
+  );
   const data = await res.json();
 
   return <Table data={data}></Table>;

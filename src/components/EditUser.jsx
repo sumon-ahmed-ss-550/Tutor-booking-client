@@ -34,13 +34,16 @@ const EditUser = ({ item }) => {
       institutionExperience: form.institutionExperience.value,
     };
 
-    const res = await fetch(`http://localhost:8000/tutors/user/${user?.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(updatedTutor),
-      headers: {
-        "Content-type": "application/json",
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/tutors/user/${user?.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(updatedTutor),
+        headers: {
+          "Content-type": "application/json",
+        },
       },
-    });
+    );
     const data = await res.json();
     if (data) {
       router.refresh();
