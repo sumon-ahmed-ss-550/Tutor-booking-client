@@ -7,12 +7,9 @@ const Table = ({ data }) => {
   const router = useRouter();
 
   const handleDeleteData = async (userId) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/tutors/user/${userId}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const res = await fetch(`${NEXT_PUBLIC_SERVER_URL}/tutors/user/${userId}`, {
+      method: "DELETE",
+    });
     const data = await res.json();
     if (data) {
       router.refresh();
